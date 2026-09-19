@@ -3,30 +3,59 @@ import java.util.Scanner;
 
 public class Menu {
 
-    public void altaCliente () {
+    public void displayMenu() {
 
         Scanner sc = new Scanner(System.in);
-        String nombre, telefono, matricula;
+        int op;
+        boolean salir = false;
 
         do {
-            System.out.println("Introduzca el nombre: ");
-            nombre = sc.nextLine();
-        } while (nombre.isEmpty());
+            System.out.println("Por favor, introduzca el número de la acción que desee realizar: ");
+            System.out.println("1. Dar de alta un cliente");
+            System.out.println("2. Listar clientes");
+            System.out.println("3. Buscar cliente");
+            System.out.println("4. Procesar un pago de repostaje");
+            System.out.println("5. Consultar pagos");
+            System.out.println("0. Salir");
 
-        do {
-            System.out.println("Introduzca el teléfono: ");
-            telefono = sc.nextLine();
-        } while (telefono.isEmpty());
+            System.out.print("Opción:");
+            op = sc.nextInt();
 
-        do {
-            System.out.println("Introduzca la matrícula: ");
-            matricula = sc.nextLine();
-        } while (matricula.isEmpty());
+            switch(op) {
+                case 1: {crearCliente();
+                    salir = true;};
+                case 2: {listarClientes();
+                    salir = true;};
+                case 3: {buscarCliente();
+                    salir = true;};
+                case 4: {crearPago();
+                    salir = true;};
+                case 5: {listarPagos();
+                    salir = true;};
+                case 0: salir = true;
+                default:
+                    System.out.println("Opción inválida, por favor introduzca una acción válida."); ;
+            }
+        } while(!salir);
+    }
 
-        //meter para comprobar que la matrícula no esté registrada vale?? venga
+    public void crearCliente () {
 
-        matricula = matricula.toUpperCase();
+    }
 
+    public void listarClientes() {
+
+    }
+
+    public void buscarCliente() {
+
+    }
+
+    public void crearPago() {
+
+    }
+
+    public void listarPagos() {
 
     }
 }

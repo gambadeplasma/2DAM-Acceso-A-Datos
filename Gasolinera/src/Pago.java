@@ -1,6 +1,6 @@
 import java.time.LocalDate;
 
-public class Pago {
+public class Pago implements Comparable<Pago>{
 
     private final int ID;
     private int IDcliente;
@@ -62,5 +62,20 @@ public class Pago {
         this.combustible = combustible;
     }
 
+    @Override
+    public String toString() {
+        return "Pago{" +
+                "ID=" + ID +
+                ", IDcliente=" + IDcliente +
+                ", fecha=" + fecha +
+                ", importe=" + importe +
+                ", litros=" + litros +
+                ", combustible='" + combustible + '\'' +
+                '}';
+    }
 
+    @Override
+    public int compareTo(Pago p) {
+        return p.getFecha().compareTo(fecha);
+    }
 }
