@@ -1,5 +1,5 @@
 public class Cliente implements Comparable<Cliente>{
-    private final int ID;
+    private int ID;
     private String nombre;
     private String tlf;
     private String matricula;

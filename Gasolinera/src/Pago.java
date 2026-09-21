@@ -1,15 +1,16 @@
-import java.time.LocalDate;
+import java.util.Date;
+
 
 public class Pago implements Comparable<Pago>{
 
     private final int ID;
     private int IDcliente;
-    private LocalDate fecha;
-    private int importe;
-    private int litros;
-    private String combustible;
+    private Date fecha;
+    private double importe;
+    private double litros;
+    private Combustible combustible;
 
-    public Pago(int ID, int IDcliente, LocalDate fecha, int importe, int litros, String combustible) {
+    public Pago(int ID, int IDcliente, Date fecha, double importe, double litros, Combustible combustible) {
         this.ID = ID;
         this.IDcliente = IDcliente;
         this.fecha = fecha;
@@ -30,15 +31,15 @@ public class Pago implements Comparable<Pago>{
         this.IDcliente = IDcliente;
     }
 
-    public LocalDate getFecha() {
+    public Date getFecha() {
         return fecha;
     }
 
-    public void setFecha(LocalDate fecha) {
+    public void setFecha(Date fecha) {
         this.fecha = fecha;
     }
 
-    public int getImporte() {
+    public double getImporte() {
         return importe;
     }
 
@@ -46,7 +47,7 @@ public class Pago implements Comparable<Pago>{
         this.importe = importe;
     }
 
-    public int getLitros() {
+    public double getLitros() {
         return litros;
     }
 
@@ -54,11 +55,11 @@ public class Pago implements Comparable<Pago>{
         this.litros = litros;
     }
 
-    public String getCombustible() {
+    public Combustible getCombustible() {
         return combustible;
     }
 
-    public void setCombustible(String combustible) {
+    public void setCombustible(Combustible combustible) {
         this.combustible = combustible;
     }
 
