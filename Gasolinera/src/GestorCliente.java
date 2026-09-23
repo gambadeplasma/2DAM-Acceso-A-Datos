@@ -4,7 +4,7 @@ import java.util.Locale;
 
 public class GestorCliente {
 
-    private List<Cliente> listaClientes;
+    private final List<Cliente> listaClientes;
 
     public GestorCliente() {
         this.listaClientes = new ArrayList<Cliente>();
