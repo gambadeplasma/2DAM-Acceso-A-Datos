@@ -40,7 +40,7 @@ public class GestorTexto {
         formato.setLenient(false);
 
         while(true) {
-            System.out.println("Introduzca una fecha con el formato \"dd/MM/yyyy\": ");
+            System.out.println("Introduzca una fecha con el formato (dd/MM/yyyy): ");
             String in = sc.nextLine();
 
             if (in.isEmpty()) {
@@ -53,7 +53,10 @@ public class GestorTexto {
 
                 if(!formato.format(fecha).equals(in)) {
                     System.out.println("Formato incorrecto.");
+                    continue;
                 }
+
+                return fecha;
 
             } catch (ParseException e) {
                 System.out.println("Fecha y/o formato incorrecto/s.");

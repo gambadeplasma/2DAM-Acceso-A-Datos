@@ -21,7 +21,9 @@ public class GestorCliente {
         if(existeCliente(matricula)) {
             System.out.println("Esta matrícula ya está registrada.");
         } else {
-            listaClientes.add(new Cliente(listaClientes.size() + 1, nombre, telefono, matricula));
+            Cliente c = new Cliente(listaClientes.size() + 1, nombre, telefono, matricula);
+            listaClientes.add(c);
+            gArchivo.guardarClientes(c);
         }
     }
 
@@ -37,7 +39,7 @@ public class GestorCliente {
         return false;
     }
 
-    private boolean existeCliente (int id) {
+    public boolean existeCliente (int id) {
 
         for(Cliente c : listaClientes) {
 

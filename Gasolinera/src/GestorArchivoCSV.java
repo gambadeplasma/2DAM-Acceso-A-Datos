@@ -41,7 +41,7 @@ public class GestorArchivoCSV implements GestorArchivos {
         try (BufferedReader lector = Files.newBufferedReader(csvClientes, StandardCharsets.UTF_8)) {
 
             //Ignoramos la cabecera del csv
-            String linea = lector.readLine();
+            String linea;
             while ((linea = lector.readLine()) != null) {
 
                 String[] datosCliente = linea.split(",");

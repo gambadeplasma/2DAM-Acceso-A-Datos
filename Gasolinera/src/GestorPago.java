@@ -20,8 +20,9 @@ public class GestorPago {
 
     public void crearPago(int IDcliente, Date fecha, double importe, double litros, Combustible combustible) {
 
-        listaPagos.add(new Pago(listaPagos.size() + 1, IDcliente, fecha, importe, litros, combustible));
-
+        Pago p = new Pago(listaPagos.size() + 1, IDcliente, fecha, importe, litros, combustible);
+        listaPagos.add(p);
+        gArchivo.guardarPagos(p);
     }
 
     public void listarPagos() {

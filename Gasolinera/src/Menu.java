@@ -31,7 +31,7 @@ public class Menu {
             System.out.println("No se han podido crear el directorio / archivo.");
         }
 
-        gCliente.listarClientes();
+        gCliente.leerClientes();
         gPagos.leerPagos();
     }
 
@@ -119,7 +119,7 @@ public class Menu {
             System.out.println("Introduzca el ID del cliente: ");
             int IDcliente = gTexto.inOpcion();
 
-            if (gCliente.existeCliente(Integer.toString(IDcliente))) {
+            if (gCliente.existeCliente(IDcliente)) {
 
                 Date fecha = gTexto.inFecha();
 
