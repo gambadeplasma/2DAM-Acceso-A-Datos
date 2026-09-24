@@ -3,13 +3,13 @@ import java.util.List;
 
 public interface GestorArchivos {
 
-    List<Cliente> leerClientes() throws IOException;
+    List<Cliente> leerClientes();
 
-    boolean guardarClientes();
+    void guardarClientes(Cliente cliente);
 
-    List<Pago> leerPagos() throws IOException;
+    List<Pago> leerPagos();
 
-    boolean guardarPagos();
+    void guardarPagos(Pago pago);
 
     void crearArchYDir() throws IOException;
 }

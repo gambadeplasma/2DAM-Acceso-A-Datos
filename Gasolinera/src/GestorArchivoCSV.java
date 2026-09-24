@@ -7,6 +7,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import static java.nio.file.StandardOpenOption.APPEND;
 
 public class GestorArchivoCSV implements GestorArchivos {
 
@@ -14,10 +15,13 @@ public class GestorArchivoCSV implements GestorArchivos {
     final private Path csvClientes = directorio.resolve("clientes.csv");
     final private Path csvPagos = directorio.resolve("pagos.csv");
 
+    public GestorArchivoCSV() throws IOException{
+        crearArchYDir();
+    }
+
     @Override
     public void crearArchYDir() throws IOException {
 
-        try {
             Files.createDirectories(directorio);
 
             if (Files.notExists(csvClientes)) {
@@ -27,20 +31,17 @@ public class GestorArchivoCSV implements GestorArchivos {
             if (Files.notExists(csvPagos)) {
                 Files.createFile(csvPagos);
             }
-
-        } catch (IOException e) {
-            throw new IOException("No se ha podido crear el archivo / directorio.");
-        }
     }
 
     @Override
-    public List<Cliente> leerClientes() throws IOException {
+    public List<Cliente> leerClientes() {
 
         List<Cliente> leidos = new ArrayList<>();
 
         try (BufferedReader lector = Files.newBufferedReader(csvClientes, StandardCharsets.UTF_8)) {
 
-            String linea;
+            //Ignoramos la cabecera del csv
+            String linea = lector.readLine();
             while ((linea = lector.readLine()) != null) {
 
                 String[] datosCliente = linea.split(",");
@@ -50,19 +51,33 @@ public class GestorArchivoCSV implements GestorArchivos {
             }
 
         } catch (IOException e) {
-            throw new IOException("No se ha podido leer el contenido del archivo.");
+            System.out.println("No se ha podido acceder a los clientes.");
         }
 
         return leidos;
     }
 
     @Override
-    public boolean guardarClientes() {
-        return false;
+    public void guardarClientes(Cliente cliente) {
+
+        String linea = cliente.getID() + ", " +
+                cliente.getNombre() + ", " +
+                cliente.getTlf() + ", " +
+                cliente.getMatricula() + "; " +
+                System.lineSeparator();
+
+        try {
+
+            Files.writeString(csvClientes, linea, APPEND);
+
+        } catch (IOException e) {
+
+            System.out.println("No se ha podido guardar el cliente.");
+        }
     }
 
     @Override
-    public List<Pago> leerPagos() throws IOException {
+    public List<Pago> leerPagos() {
 
         List<Pago> leidos = new ArrayList<>();
         SimpleDateFormat formateador = new SimpleDateFormat("dd/MM/yyyy");
@@ -94,26 +109,32 @@ public class GestorArchivoCSV implements GestorArchivos {
             }
 
         } catch (IOException e) {
-            throw new IOException("No se ha podido leer el contenido del archivo.");
+            System.out.println("No se ha podido acceder a los pagos.");
         }
 
         return leidos;
     }
 
     @Override
-    public boolean guardarPagos() {
-        return false;
-    }
+    public void guardarPagos(Pago pago) {
 
-    public Path getDirectorio() {
-        return directorio;
-    }
+        SimpleDateFormat formateador = new SimpleDateFormat("dd/MM/yyyy");
 
-    public Path getCsvClientes() {
-        return csvClientes;
-    }
+        String linea = pago.getID() + ", " +
+                pago.getIDcliente() + ", " +
+                formateador.format(pago.getFecha()) + ", " +
+                pago.getImporte() + ", " +
+                pago.getLitros() + ", " +
+                pago.getCombustible() + ";" +
+                System.lineSeparator();
 
-    public Path getCsvPagos() {
-        return csvPagos;
+        try {
+
+            Files.writeString(csvPagos, linea, APPEND);
+
+        } catch (IOException e) {
+
+            System.out.println("No se ha podido guardar el pago.");
+        }
     }
 }

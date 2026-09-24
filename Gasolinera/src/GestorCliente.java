@@ -4,10 +4,16 @@ import java.util.Locale;
 
 public class GestorCliente {
 
-    private final List<Cliente> listaClientes;
+    private List<Cliente> listaClientes;
+    private GestorArchivoCSV gArchivo;
 
-    public GestorCliente() {
+    public GestorCliente(GestorArchivoCSV gArchivo) {
         this.listaClientes = new ArrayList<Cliente>();
+        this.gArchivo = gArchivo;
+    }
+
+    public void leerClientes() {
+        this.listaClientes = gArchivo.leerClientes();
     }
 
     public void crearCliente(String nombre, String telefono, String matricula) {

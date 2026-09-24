@@ -1,26 +1,49 @@
+import java.io.IOException;
 import java.util.Date;
 import java.util.Scanner;
 
 public class Menu {
 
-    final private GestorCliente gCliente;
-    final private GestorPago gPagos;
-    final private GestorTexto gTexto;
+    private GestorArchivoCSV gArchivo;
+    private GestorCliente gCliente;
+    private GestorPago gPagos;
+    private GestorTexto gTexto;
 
     public Menu() {
-        this.gCliente = new GestorCliente();
-        this.gPagos = new GestorPago();
+        this.gArchivo = null;
+
+        try {
+            gArchivo = new GestorArchivoCSV();
+        } catch (IOException e) {
+            System.out.println("ERROR FATAL.");
+        }
+
         this.gTexto = new GestorTexto();
+        this.gCliente = new GestorCliente(gArchivo);
+        this.gPagos = new GestorPago(gCliente, gArchivo);
+    }
+
+    public void leerArchivos() {
+
+        try {
+            gArchivo.crearArchYDir();
+        } catch (IOException e) {
+            System.out.println("No se han podido crear el directorio / archivo.");
+        }
+
+        gCliente.listarClientes();
+        gPagos.leerPagos();
     }
 
     public void displayMenu() {
 
+        leerArchivos();
         Scanner sc = new Scanner(System.in);
         int op;
         boolean salir = false;
 
         do {
-
+            System.out.print("\n");
             System.out.println("Por favor, introduzca el número de la acción que desee realizar: ");
             System.out.println("1. Dar de alta un cliente");
             System.out.println("2. Listar clientes");
@@ -28,27 +51,29 @@ public class Menu {
             System.out.println("4. Procesar un pago de repostaje");
             System.out.println("5. Consultar pagos");
             System.out.println("0. Salir");
-
-            System.out.print("Opción:");
+            System.out.print("\n");
+            System.out.print("Opción: ");
             op = gTexto.inOpcion();
 
             switch(op) {
-                case 1: {crearCliente();
-                        salir = true;};
+                case 1: crearCliente();
+                        break;
 
-                case 2: {listarClientes();
-                        salir = true;};
+                case 2: listarClientes();
+                        break;
 
-                case 3: {buscarCliente();
-                        salir = true;};
+                case 3: buscarCliente();
+                        break;
 
-                case 4: {crearPago();
-                        salir = true;};
+                case 4: crearPago();
+                        break;
 
-                case 5: {listarPagos();
-                        salir = true;};
+                case 5: listarPagos();
+                        break;
 
                 case 0: salir = true;
+                    System.out.println("Saliendo del programa...");
+                    break;
 
                 default: System.out.println("Opción inválida, por favor introduzca una acción válida."); ;
 

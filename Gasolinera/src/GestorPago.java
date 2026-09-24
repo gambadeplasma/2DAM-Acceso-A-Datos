@@ -6,10 +6,16 @@ public class GestorPago {
 
     private List<Pago> listaPagos;
     private GestorCliente gCliente;
+    private GestorArchivoCSV gArchivo;
 
-    public GestorPago() {
+    public GestorPago(GestorCliente gCliente, GestorArchivoCSV gArchivo) {
         this.listaPagos = new ArrayList<Pago>();
         this.gCliente = gCliente;
+        this.gArchivo = gArchivo;
+    }
+
+    public void leerPagos() {
+        this.listaPagos = gArchivo.leerPagos();
     }
 
     public void crearPago(int IDcliente, Date fecha, double importe, double litros, Combustible combustible) {
