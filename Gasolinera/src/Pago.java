@@ -1,3 +1,4 @@
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 
@@ -65,14 +66,13 @@ public class Pago implements Comparable<Pago>{
 
     @Override
     public String toString() {
-        return "Pago{" +
-                "ID=" + ID +
-                ", IDcliente=" + IDcliente +
-                ", fecha=" + fecha +
-                ", importe=" + importe +
-                ", litros=" + litros +
-                ", combustible='" + combustible + '\'' +
-                '}';
+        SimpleDateFormat formateador = new SimpleDateFormat("dd/MM/yyyy");
+        return  "[ID - " + ID +
+                ", \nIDcliente - " + IDcliente +
+                ", \nfecha - " + formateador.format(fecha) +
+                ", \nimporte - " + importe +
+                ", \nlitros - " + litros +
+                ", \ncombustible - '" + combustible + "']";
     }
 
     @Override

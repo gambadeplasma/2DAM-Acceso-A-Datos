@@ -60,10 +60,10 @@ public class GestorArchivoCSV implements GestorArchivos {
     @Override
     public void guardarClientes(Cliente cliente) {
 
-        String linea = cliente.getID() + ", " +
-                cliente.getNombre() + ", " +
-                cliente.getTlf() + ", " +
-                cliente.getMatricula() + "; " +
+        String linea = cliente.getID() + "," +
+                cliente.getNombre() + "," +
+                cliente.getTlf() + "," +
+                cliente.getMatricula() + ";" +
                 System.lineSeparator();
 
         try {
@@ -120,11 +120,11 @@ public class GestorArchivoCSV implements GestorArchivos {
 
         SimpleDateFormat formateador = new SimpleDateFormat("dd/MM/yyyy");
 
-        String linea = pago.getID() + ", " +
-                pago.getIDcliente() + ", " +
-                formateador.format(pago.getFecha()) + ", " +
-                pago.getImporte() + ", " +
-                pago.getLitros() + ", " +
+        String linea = pago.getID() + "," +
+                pago.getIDcliente() + "," +
+                formateador.format(pago.getFecha()) + "," +
+                pago.getImporte() + "," +
+                pago.getLitros() + "," +
                 pago.getCombustible() + ";" +
                 System.lineSeparator();
 
