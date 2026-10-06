@@ -77,6 +77,7 @@ public class Pago implements Comparable<Pago>{
 
     @Override
     public int compareTo(Pago p) {
+
         return p.getFecha().compareTo(fecha);
     }
 }

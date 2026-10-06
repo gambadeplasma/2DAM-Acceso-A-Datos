@@ -6,9 +6,9 @@ public class GestorPago {
 
     private List<Pago> listaPagos;
     private GestorCliente gCliente;
-    private GestorArchivoCSV gArchivo;
+    private GestorArchivoJSON gArchivo;
 
-    public GestorPago(GestorCliente gCliente, GestorArchivoCSV gArchivo) {
+    public GestorPago(GestorCliente gCliente, GestorArchivoJSON gArchivo) {
         this.listaPagos = new ArrayList<Pago>();
         this.gCliente = gCliente;
         this.gArchivo = gArchivo;
@@ -32,8 +32,14 @@ public class GestorPago {
             System.out.println("No existen pagos registrados.");
 
         } else {
-
-            listaPagos.sort(new ComparadorIDPagos());
+            //programación funcional; ya no se necesita la clase del comparador IDPagos
+            listaPagos.sort(
+                    ((p1, p2) -> {
+                        int result = p2.compareTo(p1);
+                        return p1.getID() - p2.getID();
+                        //return result != 0 ? result : Integer.compare(p2.getID(), p1.getID());
+                    })
+            );
 
             for(Pago p : listaPagos) {
                 System.out.println(p);

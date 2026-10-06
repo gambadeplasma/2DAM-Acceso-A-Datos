@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 public class Menu {
 
-    private GestorArchivoCSV gArchivo;
+    private GestorArchivoJSON gArchivo;
     private GestorCliente gCliente;
     private GestorPago gPagos;
     private GestorTexto gTexto;
@@ -13,13 +13,13 @@ public class Menu {
         this.gArchivo = null;
 
         try {
-            gArchivo = new GestorArchivoCSV();
+            gArchivo = new GestorArchivoJSON();
         } catch (IOException e) {
             System.out.println("ERROR FATAL.");
         }
 
         this.gTexto = new GestorTexto();
-        this.gCliente = new GestorCliente(gArchivo);
+        this.gCliente = new GestorCliente(gArchivo);   
         this.gPagos = new GestorPago(gCliente, gArchivo);
     }
 

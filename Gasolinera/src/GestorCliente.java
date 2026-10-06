@@ -1,13 +1,12 @@
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 public class GestorCliente {
 
     private List<Cliente> listaClientes;
-    private GestorArchivoCSV gArchivo;
+    private GestorArchivoJSON gArchivo;
 
-    public GestorCliente(GestorArchivoCSV gArchivo) {
+    public GestorCliente(GestorArchivoJSON gArchivo) {
         this.listaClientes = new ArrayList<Cliente>();
         this.gArchivo = gArchivo;
     }
