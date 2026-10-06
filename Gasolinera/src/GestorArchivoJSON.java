@@ -62,8 +62,17 @@ public class GestorArchivoJSON implements GestorArchivos {
         String linea = "{\"id\": " + cliente.getID() + ",\"nombre\": \"" +
                 cliente.getNombre() + "\",\"telefono\": \"" +
                 cliente.getTlf() + "\",\"matricula\": \"" +
-                cliente.getMatricula() + "\"}" +
-                System.lineSeparator();
+                cliente.getMatricula() + "\"}";
+
+        try {
+
+            if (!Files.readString(jsonClientes).isEmpty()) {
+                linea = "," + System.lineSeparator() + linea;
+            }
+
+        } catch (IOException e) {
+            System.out.println(e);
+        }
 
         try {
 
@@ -124,10 +133,17 @@ public class GestorArchivoJSON implements GestorArchivos {
                 formateador.format(pago.getFecha()) + "\",\"importe\": " +
                 pago.getImporte() + ",\"litros\": " +
                 pago.getLitros() + ",\"combustible\": \"" +
-                pago.getCombustible() + "\"}" +
-                System.lineSeparator();
+                pago.getCombustible() + "\"}";
 
-        
+        try {
+
+            if (!Files.readString(jsonPagos).isEmpty()) {
+                linea = "," + System.lineSeparator() + linea;
+            }
+
+        } catch (IOException e) {
+            System.out.println(e);
+        }
 
         try {
 
