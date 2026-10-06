@@ -6,14 +6,17 @@ import java.nio.file.Path;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+
 import static java.nio.file.StandardOpenOption.APPEND;
 
 public class GestorArchivoJSON implements GestorArchivos {
 
-    final private Path directorio = Path.of("datos");
-    final private Path jsonClientes = directorio.resolve("clientes.json");
-    final private Path jsonPagos = directorio.resolve("pagos.json");
+    private Path directorio = Path.of("datos");
+    private final Path jsonClientes = directorio.resolve("clientes.json");
+    private final Path jsonPagos = directorio.resolve("pagos.json");
 
     public GestorArchivoJSON() throws IOException{
         crearArchYDir();
@@ -45,7 +48,12 @@ public class GestorArchivoJSON implements GestorArchivos {
 
                 String[] datosCliente = linea.split(",");
 
-                Cliente cliente = new Cliente(Integer.parseInt(datosCliente[0]), datosCliente[1], datosCliente[2],datosCliente[3].replace(";", ""));
+                int ID = Integer.parseInt(datosCliente[0].substring(datosCliente[0].indexOf(":") + 1).trim());
+                String nombre = datosCliente[1].substring(datosCliente[1].indexOf(":") + 1).trim().replace("\"", "");
+                String tlf = datosCliente[2].substring(datosCliente[2].indexOf(":") + 1).trim().replace("\"", "");
+                String matricula = datosCliente[3].substring(datosCliente[3].indexOf(":") + 1).trim().replace("\"", "");
+
+                Cliente cliente = new Cliente(ID, nombre, tlf, matricula);
                 leidos.add(cliente);
             }
 
@@ -99,14 +107,14 @@ public class GestorArchivoJSON implements GestorArchivos {
 
                 try {
 
-                    Pago pago = new Pago(
-                            Integer.parseInt(datosPago[0]),
-                            Integer.parseInt(datosPago[1]),
-                            formateador.parse(datosPago[2]),
-                            Double.parseDouble(datosPago[3]),
-                            Double.parseDouble(datosPago[4]),
-                            Combustible.valueOf(datosPago[5].replace(";", "").toUpperCase().trim())
-                    );
+                    int ID = Integer.parseInt(datosPago[0].substring(datosPago[0].indexOf(":") + 1).trim());
+                    int IDCliente = Integer.parseInt(datosPago[1].substring(datosPago[1].indexOf(":") + 1).trim());;
+                    Date fecha = formateador.parse(datosPago[2].substring(datosPago[2].indexOf(":") + 1).replace("\"", "").trim());
+                    Double importe = Double.parseDouble(datosPago[3].substring(datosPago[3].indexOf(":") + 1).replace("\"", "").trim());
+                    Double litros = Double.parseDouble(datosPago[4].substring(datosPago[4].indexOf(":") + 1).replace("\"", "").trim());
+                    Combustible combustible = Combustible.valueOf(datosPago[5].substring(datosPago[5].indexOf(":") + 1).replace("\"", "").toUpperCase().trim());
+
+                    Pago pago = new Pago(ID, IDCliente, fecha, importe, litros, combustible);
 
                     leidos.add(pago);
 
@@ -121,6 +129,10 @@ public class GestorArchivoJSON implements GestorArchivos {
         }
 
         return leidos;
+    }
+
+    public void setDirectorio(Path directorio) {
+        this.directorio = directorio;
     }
 
     @Override
