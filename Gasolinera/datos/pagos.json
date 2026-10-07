@@ -1,6 +1,7 @@
 {
-	[
-,
+	"pagos":[
+{"id": 1,"clienteId": 1,"fecha": "01/05/2019","importe": 40.6,"litros": 30.5,"combustible": "GASOLINA"},
+{"id": 2,"clienteId": 1,"fecha": "29/09/2026","importe": 68.5,"litros": 4.0,"combustible": "GASOLINA"},
 {"id": 3,"clienteId": 1,"fecha": "29/09/2026","importe": 45.0,"litros": 8.0,"combustible": "DIESEL"}
 	]
 }

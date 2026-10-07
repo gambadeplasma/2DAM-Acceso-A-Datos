@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Scanner;
@@ -18,17 +19,17 @@ public class MigraCSVToJson {
         try {
             this.gArchivosJSON = new GestorArchivoJSON();
         } catch (IOException e) {
-            System.out.println("ERROR FATALÍSIMO");
+            System.out.println("Error al crear el gestor de archivos." + e);
         }
 
         try {
             this.gArchivosCSV = new GestorArchivoCSV();
         } catch (IOException e) {
-            System.out.println("ERROR FATALÍSIMO");
+            System.out.println("Error al crear el gestor de archivos." + e);
         }
 
-        clientesMigrados = 0;
-        pagosMigrados = 0;
+        this.clientesMigrados = 0;
+        this.pagosMigrados = 0;
 
         this.gCliente = new GestorCliente(gArchivosJSON);
         this.gPagos = new GestorPago(gCliente, gArchivosJSON);
@@ -37,25 +38,43 @@ public class MigraCSVToJson {
         gCliente.leerClientes();
     }
 
-    public void hayArchivos(boolean pregunta, Menu menu) {
-        if (pregunta) {
-            transmutacionDeArchivos();
-            System.out.println("Se han migrado " + clientesMigrados + " clientes y " + pagosMigrados + " pagos.");
-            menu.displayMenu();
-        } else {
-            menu.displayMenu();
-        }
-    }
-
     public void transmutacionDeArchivos() {
         Scanner sc = new Scanner(System.in);
 
-        System.out.println("Introduzca el directorio de sus archivos clientes.json y pagos.json: ");
-        Path directorio = Path.of(sc.nextLine());
-        gArchivosJSON.setDirectorio(directorio);
+        if (Files.notExists(gArchivosJSON.getClientes()) && Files.notExists(gArchivosJSON.getPagos())) {
+            System.out.println("¿Desea migrar sus datos .csv a .json? (Y/n)");
+            String in;
 
-        migrarClientes();
-        migrarPagos();
+            do {
+                in = sc.nextLine();
+            } while(!in.equalsIgnoreCase("y") && !in.equalsIgnoreCase("n"));
+
+            if (in.equalsIgnoreCase("y")) {
+                System.out.println("Introduzca el directorio en el que se encuentran sus .csv: ");
+
+                in = sc.nextLine();
+                gArchivosCSV.setDirectorio(Path.of(in));
+
+                if (Files.notExists(gArchivosCSV.getClientes()) || Files.notExists(gArchivosCSV.getPagos())) {
+                    System.out.println("No se han podido localizar los archivos para la migración.");
+                } else {
+                    try {
+                        gArchivosJSON.crearArchYDir();
+                    } catch (IOException e) {
+                        System.out.println("No se han podido crear los archivos a los que migrar.");
+                    }
+
+                    migrarClientes();
+                    migrarPagos();
+                }
+            } else {
+                try {
+                    gArchivosJSON.crearArchYDir();
+                } catch (IOException e) {
+                    System.out.println("No se han podido crear los archivos .json.");
+                }
+            }
+        }
     }
 
     private void migrarClientes() {

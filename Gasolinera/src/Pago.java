@@ -67,12 +67,14 @@ public class Pago implements Comparable<Pago>{
     @Override
     public String toString() {
         SimpleDateFormat formateador = new SimpleDateFormat("dd/MM/yyyy");
-        return  "[ID - " + ID +
-                ", \nIDcliente - " + IDcliente +
-                ", \nfecha - " + formateador.format(fecha) +
-                ", \nimporte - " + importe +
-                ", \nlitros - " + litros +
-                ", \ncombustible - '" + combustible + "']";
+
+        return "{\"id\": " + ID +
+                ",\"idCliente\": " + IDcliente +
+                ",\"fecha\": " + formateador.format(fecha) +
+                ",\"importe\": " + importe +
+                ",\"litros\": " + litros +
+                ",\"combustible\": " + combustible.toString() +
+                "}";
     }
 
     @Override

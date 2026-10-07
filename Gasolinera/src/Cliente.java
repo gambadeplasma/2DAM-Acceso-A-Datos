@@ -41,10 +41,11 @@ public class Cliente implements Comparable<Cliente>{
 
     @Override
     public String toString() {
-        return  "{\"id\": " + ID + ",\"nombre\": " +
-                nombre + ",\"telefono\": " +
-                tlf + ",\"matricula\": " +
-                matricula + "}";
+        return  "{\"id\": " + ID +
+                ",\"nombre\": " + nombre +
+                ",\"telefono\": " + tlf +
+                ",\"matricula\": " + matricula +
+                "}";
     }
 
     @Override

@@ -18,11 +18,12 @@ public class GestorArchivoJSON implements GestorArchivos {
     private final Path jsonClientes = directorio.resolve("clientes.json");
     private final Path jsonPagos = directorio.resolve("pagos.json");
 
-    private String openerJSON = "{\n\t[\n";
-    private String closerJSON = "\n\t]\n}";
+    private final String openerJSONClientes = "{" + System.lineSeparator() + "\t\"clientes\":[" + System.lineSeparator();
+    private final String openerJSONPagos = "{" + System.lineSeparator() + "\t\"pagos\":[" + System.lineSeparator();
+    private final String closerJSON = System.lineSeparator() + "\t]" + System.lineSeparator() + "}";
 
-    public GestorArchivoJSON() throws IOException{
-        crearArchYDir();
+    public GestorArchivoJSON() throws IOException {
+
     }
 
     @Override
@@ -50,19 +51,23 @@ public class GestorArchivoJSON implements GestorArchivos {
 
             while ((linea = lector.readLine()) != null) {
 
+                if (linea.length() == 1 || linea.contains("\t")) {
+                    continue;
+                }
+
                 String[] datosCliente = linea.split(",");
 
                 int ID = Integer.parseInt(datosCliente[0].substring(datosCliente[0].indexOf(":") + 1).trim());
                 String nombre = datosCliente[1].substring(datosCliente[1].indexOf(":") + 1).trim().replace("\"", "");
                 String tlf = datosCliente[2].substring(datosCliente[2].indexOf(":") + 1).trim().replace("\"", "");
-                String matricula = datosCliente[3].substring(datosCliente[3].indexOf(":") + 1).trim().replace("\"", "");
+                String matricula = datosCliente[3].substring(datosCliente[3].indexOf(":") + 1).replace("}", "").trim().replace("\"", "");
 
                 Cliente cliente = new Cliente(ID, nombre, tlf, matricula);
                 leidos.add(cliente);
             }
 
         } catch (IOException e) {
-            System.out.println("No se ha podido acceder a los clientes.");
+            System.out.print("");
         }
 
         return leidos;
@@ -78,21 +83,11 @@ public class GestorArchivoJSON implements GestorArchivos {
         String linea = listaClientes.stream().map(
                 this::clienteAStringJSON
         ).reduce(
-                (String s1, String s2) -> {return s1 + ",\n" + s2;}
+                (String s1, String s2) -> {return s1 + "," + System.lineSeparator() + s2;}
         ).orElse("");
 
         try {
-
-            if (!Files.readString(jsonClientes).isEmpty()) {
-                linea = "," + System.lineSeparator() + linea;
-            }
-
-        } catch (IOException e) {
-            System.out.println(e);
-        }
-
-        try {
-            Files.writeString(jsonClientes, openerJSON, TRUNCATE_EXISTING);
+            Files.writeString(jsonClientes, openerJSONClientes, TRUNCATE_EXISTING);
             Files.writeString(jsonClientes, linea, APPEND);
             Files.writeString(jsonClientes, closerJSON, APPEND);
 
@@ -113,6 +108,10 @@ public class GestorArchivoJSON implements GestorArchivos {
             String linea;
 
             while ((linea = lector.readLine()) != null) {
+
+                if (linea.length() == 1 || linea.contains("\t")) {
+                   continue;
+                }
 
                 String[] datosPago = linea.split(",");
 
@@ -136,7 +135,7 @@ public class GestorArchivoJSON implements GestorArchivos {
             }
 
         } catch (IOException e) {
-            System.out.println("No se ha podido acceder a los pagos.");
+            System.out.print("");
         }
 
         return leidos;
@@ -155,27 +154,27 @@ public class GestorArchivoJSON implements GestorArchivos {
         String linea = listaPagos.stream().map(
                 this::pagoAStringJSON
         ).reduce(
-                (String s1, String s2) -> s1 + ",\n" + s2
+                (String s1, String s2) -> s1 + "," + System.lineSeparator() + s2
         ).orElse("");
 
         try {
-
-            if (!Files.readString(jsonPagos).isEmpty()) {
-                linea = "," + System.lineSeparator() + linea;
-            }
-
-        } catch (IOException e) {
-            System.out.println(e);
-        }
-
-        try {
-            Files.writeString(jsonPagos, openerJSON, TRUNCATE_EXISTING);
+            Files.writeString(jsonPagos, openerJSONPagos, TRUNCATE_EXISTING);
             Files.writeString(jsonPagos, linea, APPEND);
             Files.writeString(jsonPagos, closerJSON, APPEND);
         } catch (IOException e) {
 
             System.out.println("No se ha podido guardar el pago.");
         }
+    }
+
+    @Override
+    public Path getClientes() {
+        return jsonClientes;
+    }
+
+    @Override
+    public Path getPagos() {
+        return jsonPagos;
     }
 
     private String clienteAStringJSON(Cliente cliente) {

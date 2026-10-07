@@ -11,9 +11,9 @@ import static java.nio.file.StandardOpenOption.APPEND;
 
 public class GestorArchivoCSV implements GestorArchivos {
 
-    final private Path directorio = Path.of("datos");
-    final private Path csvClientes = directorio.resolve("clientes.csv");
-    final private Path csvPagos = directorio.resolve("pagos.csv");
+    private Path directorio = Path.of("datos");
+    private Path csvClientes = directorio.resolve("clientes.csv");
+    private Path csvPagos = directorio.resolve("pagos.csv");
 
     public GestorArchivoCSV() throws IOException{
         crearArchYDir();
@@ -136,5 +136,30 @@ public class GestorArchivoCSV implements GestorArchivos {
 
             System.out.println("No se ha podido guardar el pago.");
         }
+    }
+
+    @Override
+    public Path getClientes() {
+        return csvClientes;
+    }
+
+    @Override
+    public Path getPagos() {
+        return csvPagos;
+    }
+
+    public void setDirectorio(Path directorio) {
+        this.directorio = directorio;
+
+        setCsvClientes(directorio.resolve("clientes.csv"));
+        setCsvPagos(directorio.resolve("pagos.csv"));
+    }
+
+    public void setCsvClientes(Path csvClientes) {
+        this.csvClientes = csvClientes;
+    }
+
+    public void setCsvPagos(Path csvPagos) {
+        this.csvPagos = csvPagos;
     }
 }
