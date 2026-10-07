@@ -50,4 +50,16 @@ public class GestorPago {
     public boolean existenPagos() {
         return !listaPagos.isEmpty();
     }
+
+    public boolean existePago (int ID) {
+
+        for(Pago p : listaPagos) {
+
+            if (p.getID() == ID) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

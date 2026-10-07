@@ -8,15 +8,18 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import static java.nio.file.StandardOpenOption.APPEND;
+import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
 
 public class GestorArchivoJSON implements GestorArchivos {
 
     private Path directorio = Path.of("datos");
     private final Path jsonClientes = directorio.resolve("clientes.json");
     private final Path jsonPagos = directorio.resolve("pagos.json");
+
+    private String openerJSON = "{\n\t[\n";
+    private String closerJSON = "\n\t]\n}";
 
     public GestorArchivoJSON() throws IOException{
         crearArchYDir();
@@ -44,6 +47,7 @@ public class GestorArchivoJSON implements GestorArchivos {
         try (BufferedReader lector = Files.newBufferedReader(jsonClientes, StandardCharsets.UTF_8)) {
 
             String linea;
+
             while ((linea = lector.readLine()) != null) {
 
                 String[] datosCliente = linea.split(",");
@@ -67,10 +71,15 @@ public class GestorArchivoJSON implements GestorArchivos {
     @Override
     public void guardarClientes(Cliente cliente) {
 
-        String linea = "{\"id\": " + cliente.getID() + ",\"nombre\": \"" +
-                cliente.getNombre() + "\",\"telefono\": \"" +
-                cliente.getTlf() + "\",\"matricula\": \"" +
-                cliente.getMatricula() + "\"}";
+        List<Cliente> listaClientes = leerClientes();
+        listaClientes.add(cliente);
+
+        //Programación funcional chulísima
+        String linea = listaClientes.stream().map(
+                this::clienteAStringJSON
+        ).reduce(
+                (String s1, String s2) -> {return s1 + ",\n" + s2;}
+        ).orElse("");
 
         try {
 
@@ -83,8 +92,9 @@ public class GestorArchivoJSON implements GestorArchivos {
         }
 
         try {
-
+            Files.writeString(jsonClientes, openerJSON, TRUNCATE_EXISTING);
             Files.writeString(jsonClientes, linea, APPEND);
+            Files.writeString(jsonClientes, closerJSON, APPEND);
 
         } catch (IOException e) {
 
@@ -101,6 +111,7 @@ public class GestorArchivoJSON implements GestorArchivos {
         try (BufferedReader lector = Files.newBufferedReader(jsonPagos, StandardCharsets.UTF_8)) {
 
             String linea;
+
             while ((linea = lector.readLine()) != null) {
 
                 String[] datosPago = linea.split(",");
@@ -112,7 +123,7 @@ public class GestorArchivoJSON implements GestorArchivos {
                     Date fecha = formateador.parse(datosPago[2].substring(datosPago[2].indexOf(":") + 1).replace("\"", "").trim());
                     Double importe = Double.parseDouble(datosPago[3].substring(datosPago[3].indexOf(":") + 1).replace("\"", "").trim());
                     Double litros = Double.parseDouble(datosPago[4].substring(datosPago[4].indexOf(":") + 1).replace("\"", "").trim());
-                    Combustible combustible = Combustible.valueOf(datosPago[5].substring(datosPago[5].indexOf(":") + 1).replace("\"", "").toUpperCase().trim());
+                    Combustible combustible = Combustible.valueOf(datosPago[5].substring(datosPago[5].indexOf(":") + 1).replace("\"", "").replace("}", "").toUpperCase().trim());
 
                     Pago pago = new Pago(ID, IDCliente, fecha, importe, litros, combustible);
 
@@ -138,14 +149,14 @@ public class GestorArchivoJSON implements GestorArchivos {
     @Override
     public void guardarPagos(Pago pago) {
 
-        SimpleDateFormat formateador = new SimpleDateFormat("dd/MM/yyyy");
+        List<Pago> listaPagos = leerPagos();
+        listaPagos.add(pago);
 
-        String linea = "{\"id\": " + pago.getID() + ",\"clienteId\": " +
-                pago.getIDcliente() + ",\"fecha\": \"" +
-                formateador.format(pago.getFecha()) + "\",\"importe\": " +
-                pago.getImporte() + ",\"litros\": " +
-                pago.getLitros() + ",\"combustible\": \"" +
-                pago.getCombustible() + "\"}";
+        String linea = listaPagos.stream().map(
+                this::pagoAStringJSON
+        ).reduce(
+                (String s1, String s2) -> s1 + ",\n" + s2
+        ).orElse("");
 
         try {
 
@@ -158,12 +169,31 @@ public class GestorArchivoJSON implements GestorArchivos {
         }
 
         try {
-
+            Files.writeString(jsonPagos, openerJSON, TRUNCATE_EXISTING);
             Files.writeString(jsonPagos, linea, APPEND);
-
+            Files.writeString(jsonPagos, closerJSON, APPEND);
         } catch (IOException e) {
 
             System.out.println("No se ha podido guardar el pago.");
         }
+    }
+
+    private String clienteAStringJSON(Cliente cliente) {
+        return "{\"id\": " + cliente.getID() + ",\"nombre\": \"" +
+                cliente.getNombre() + "\",\"telefono\": \"" +
+                cliente.getTlf() + "\",\"matricula\": \"" +
+                cliente.getMatricula() + "\"}";
+    }
+
+    private String pagoAStringJSON(Pago pago) {
+
+        SimpleDateFormat formateador = new SimpleDateFormat("dd/MM/yyyy");
+
+        return "{\"id\": " + pago.getID() + ",\"clienteId\": " +
+                pago.getIDcliente() + ",\"fecha\": \"" +
+                formateador.format(pago.getFecha()) + "\",\"importe\": " +
+                pago.getImporte() + ",\"litros\": " +
+                pago.getLitros() + ",\"combustible\": \"" +
+                pago.getCombustible() + "\"}";
     }
 }

@@ -5,13 +5,16 @@ import java.util.Scanner;
 
 public class MigraCSVToJson {
 
-    private int clientesMigrados = 0;
-    private int pagosMigrados = 0;
+    private int clientesMigrados;
+    private int pagosMigrados;
+    private GestorCliente gCliente;
+    private GestorPago gPagos;
 
     private GestorArchivoJSON gArchivosJSON;
     private GestorArchivoCSV gArchivosCSV;
 
     public MigraCSVToJson() {
+
         try {
             this.gArchivosJSON = new GestorArchivoJSON();
         } catch (IOException e) {
@@ -23,11 +26,22 @@ public class MigraCSVToJson {
         } catch (IOException e) {
             System.out.println("ERROR FATALÍSIMO");
         }
+
+        clientesMigrados = 0;
+        pagosMigrados = 0;
+
+        this.gCliente = new GestorCliente(gArchivosJSON);
+        this.gPagos = new GestorPago(gCliente, gArchivosJSON);
+
+        gPagos.leerPagos();
+        gCliente.leerClientes();
     }
 
     public void hayArchivos(boolean pregunta, Menu menu) {
         if (pregunta) {
             transmutacionDeArchivos();
+            System.out.println("Se han migrado " + clientesMigrados + " clientes y " + pagosMigrados + " pagos.");
+            menu.displayMenu();
         } else {
             menu.displayMenu();
         }
@@ -49,7 +63,11 @@ public class MigraCSVToJson {
         clientes = gArchivosCSV.leerClientes();
 
         for (Cliente c : clientes) {
-            gArchivosJSON.guardarClientes(c);
+
+            if (!gCliente.existeCliente(c.getID())) {
+                gArchivosJSON.guardarClientes(c);
+                clientesMigrados++;
+            }
         }
     }
 
@@ -58,7 +76,10 @@ public class MigraCSVToJson {
         pagos = gArchivosCSV.leerPagos();
 
         for (Pago p : pagos) {
-            gArchivosJSON.guardarPagos(p);
+            if (!gPagos.existePago(p.getID())) {
+                gArchivosJSON.guardarPagos(p);
+                pagosMigrados++;
+            }
         }
     }
 }
