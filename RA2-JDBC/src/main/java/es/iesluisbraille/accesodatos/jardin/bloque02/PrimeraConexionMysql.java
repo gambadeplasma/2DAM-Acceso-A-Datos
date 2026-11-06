@@ -12,12 +12,15 @@ public final class PrimeraConexionMysql {
 
     public static void main(String[] args) {
         String url = System.getenv("JARDIN_MYSQL_URL");
+        //String usuario = args.length == 0 ? System.getenv("JARDIN_MYSQL_USER") : args[0];
         String usuario = System.getenv("JARDIN_MYSQL_USER");
-        String clave = System.getenv("JARDIN_MYSQL_PASSWORD");
+        //String clave = args.length == 0 ? System.getenv("JARDIN_MYSQL_PASSWORD") : args[1];
+        String clave =  System.getenv("JARDIN_MYSQL_PASSWORD");
 
-        url = "jdbc:mysql://localhost:3306";
-        usuario = "botanico";
-        clave = "1234";
+        if (args != null && args.length > 0) {
+            usuario = args[0];
+            clave = args[1];
+        }
 
         if (url == null || url.isBlank() || usuario == null || usuario.isBlank()) {
             System.err.println("Configura JARDIN_MYSQL_URL y JARDIN_MYSQL_USER.");
