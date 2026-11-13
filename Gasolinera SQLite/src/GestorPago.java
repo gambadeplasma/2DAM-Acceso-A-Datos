@@ -5,24 +5,22 @@ import java.util.List;
 public class GestorPago {
 
     private List<Pago> listaPagos;
-    private GestorCliente gCliente;
-    private GestorArchivoJSON gArchivo;
+    final private GestorArchivos gArchivos;
 
-    public GestorPago(GestorCliente gCliente, GestorArchivoJSON gArchivo) {
+    public GestorPago(GestorCliente gCliente, GestorArchivos gArchivos) {
         this.listaPagos = new ArrayList<Pago>();
-        this.gCliente = gCliente;
-        this.gArchivo = gArchivo;
+        this.gArchivos = gArchivos;
     }
 
     public void leerPagos() {
-        this.listaPagos = gArchivo.leerPagos();
+        this.listaPagos = gArchivos.leerPagos();
     }
 
     public void crearPago(int IDcliente, Date fecha, double importe, double litros, Combustible combustible) {
 
         Pago p = new Pago(listaPagos.size() + 1, IDcliente, fecha, importe, litros, combustible);
         listaPagos.add(p);
-        gArchivo.guardarPagos(p);
+        gArchivos.guardarPagos(p);
     }
 
     public void listarPagos() {

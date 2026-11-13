@@ -4,15 +4,15 @@ import java.util.List;
 public class GestorCliente {
 
     private List<Cliente> listaClientes;
-    private GestorArchivoJSON gArchivo;
+    final private GestorArchivos gArchivos;
 
-    public GestorCliente(GestorArchivoJSON gArchivo) {
+    public GestorCliente(GestorArchivos gArchivos) {
         this.listaClientes = new ArrayList<Cliente>();
-        this.gArchivo = gArchivo;
+        this.gArchivos = gArchivos;
     }
 
     public void leerClientes() {
-        this.listaClientes = gArchivo.leerClientes();
+        this.listaClientes = gArchivos.leerClientes();
     }
 
     public void crearCliente(String nombre, String telefono, String matricula) {
@@ -22,7 +22,7 @@ public class GestorCliente {
         } else {
             Cliente c = new Cliente(listaClientes.size() + 1, nombre, telefono, matricula);
             listaClientes.add(c);
-            gArchivo.guardarClientes(c);
+            gArchivos.guardarClientes(c);
         }
     }
 

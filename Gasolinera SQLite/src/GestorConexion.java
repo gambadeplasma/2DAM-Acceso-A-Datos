@@ -7,8 +7,8 @@ import java.sql.Statement;
 
 public class GestorConexion {
 
-    private Path archivo;
-    private String url;
+    final private Path archivo;
+    final private String url;
 
     public GestorConexion(Path archivo) {
         this.archivo = archivo;
@@ -40,7 +40,13 @@ public class GestorConexion {
     }
 
     public Connection conectarSQLite() throws SQLException {
-        return DriverManager.getConnection(url);
 
+        Connection conexion = DriverManager.getConnection(url);
+
+        try (Statement config = conexion.createStatement()) {
+            config.execute("PRAGMA foreign_keys = ON");
+        }
+
+        return conexion;
     }
 }

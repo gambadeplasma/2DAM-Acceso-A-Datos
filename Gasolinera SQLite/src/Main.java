@@ -9,8 +9,16 @@ public class Main {
         GestorConexion gConexion = new GestorConexion(archivo);
 
         if (gConexion.verificarConexionSQLite()) {
-            Menu menu = new Menu();
-            menu.displayMenu();
+
+            try {
+                GestorArchivos gArchivos = new GestorSQLite(gConexion.conectarSQLite());
+
+                Menu menu = new Menu(gArchivos);
+                menu.displayMenu();
+
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
         }
     }
 }

@@ -4,29 +4,23 @@ import java.util.Scanner;
 
 public class Menu {
 
-    private GestorArchivoJSON gArchivo;
-    private GestorCliente gCliente;
-    private GestorPago gPagos;
-    private GestorTexto gTexto;
+    final private GestorArchivos gArchivos;
+    final private GestorCliente gCliente;
+    final private GestorPago gPagos;
+    final private GestorTexto gTexto;
 
-    public Menu() {
-        this.gArchivo = null;
+    public Menu(GestorArchivos gArchivos) {
 
-        try {
-            gArchivo = new GestorArchivoJSON();
-        } catch (IOException e) {
-            System.out.println("ERROR FATAL.");
-        }
-
+        this.gArchivos = gArchivos;
         this.gTexto = new GestorTexto();
-        this.gCliente = new GestorCliente(gArchivo);   
-        this.gPagos = new GestorPago(gCliente, gArchivo);
+        this.gCliente = new GestorCliente(gArchivos);
+        this.gPagos = new GestorPago(gCliente, gArchivos);
     }
 
     public void leerArchivos() {
 
         try {
-            gArchivo.crearArchYDir();
+            gArchivos.crearArchYDir();
         } catch (IOException e) {
             System.out.println("No se han podido crear el directorio / archivo.");
         }
