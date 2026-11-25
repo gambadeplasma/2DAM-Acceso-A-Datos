@@ -1,4 +1,4 @@
-## Descripción
+## Premisa
 
 Repositorio de Acceso A Datos con todos sus ejercicios y proyectos.
 
@@ -134,5 +134,5 @@ Repositorio de Acceso A Datos con todos sus ejercicios y proyectos.
 
 ## Convenciones del repositorio
 
-- Codificación: UTF-8
-- Versión java: Java 21
+* Codificación UTF-8
+* Java 21
